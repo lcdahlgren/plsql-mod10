@@ -1,32 +1,31 @@
 CREATE OR REPLACE FUNCTION LUHN_MOD10
 (
-	iNum IN Number Default 1
+   iNum IN Number Default 1
 )
 RETURN int
 AS
-    subTotal int := 0;
-    sumTotal int := 0;
+   subTotal int := 0;
+   sumTotal int := 0;
 BEGIN
-    -- Luhn algorithm validation for account numbers
-    -- (c) Feb 2010 by Luke Dahlgren
-    -- This function returns 0 if the number number passes the test.
+   -- Luhn algorithm validation for account numbers
+   -- (c) Feb 2010 by Luke Dahlgren
+   -- This function returns 0 if the number number passes the test.
     
-    -- Loop through all digits beginning with last digit
-    For step1 In Reverse 1 .. Length(iNum) Loop    
-            -- Double every other digit
-                -- bitand(x,1) returns 0 for odd value of x, 1 for even value of x
-                -- then we add 1 to get our multiplier.
-            subTotal := (to_number(Substr(iNum,step1,1))) * (BitAnd(step1,1) + 1);
-            -- If result has > 1 digit, split into individual digits
-            For step2 In 1 .. Length(subTotal) Loop
-                -- Add each digit to the sum total of all digits
-                sumTotal := sumTotal + Substr(subTotal,step2,1);
-                
-            End Loop;    
+   -- Loop through all digits beginning with last digit
+   For step1 In Reverse 1 .. Length(iNum) Loop    
+      -- Double every other digit,
+      -- bitand(x,1) returns 0 for odd value of x, 1 for even value of x,
+      -- then we add 1 to get our multiplier.
+      subTotal := (to_number(Substr(iNum,step1,1))) * (BitAnd(step1,1) + 1);
+         -- If result has > 1 digit, split into individual digits
+         For step2 In 1 .. Length(subTotal) Loop
+            -- Add each digit to the sum total of all digits
+            sumTotal := sumTotal + Substr(subTotal,step2,1);                
+         End Loop;    
         
-    End Loop;
-    -- Return the Modulus 10 (remainder of sumTotal / 10)    
-    RETURN sumTotal Mod 10;
+   End Loop;
+-- Return the Modulus 10 (remainder of sumTotal / 10)    
+RETURN sumTotal Mod 10;
 
 END;
 /
