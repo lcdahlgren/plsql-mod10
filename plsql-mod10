@@ -1,0 +1,18 @@
+CREATE OR REPLACE FUNCTION LUHN_MOD10
+(
+	iNum IN Number Default 1
+)
+RETURN int
+AS
+   subTotal int := 0;
+   sumTotal int := 0;
+BEGIN    
+   For step1 In Reverse 1 .. Length(iNum) Loop    
+      subTotal := (to_number(Substr(iNum,step1,1))) * (BitAnd(step1,1) + 1);
+      For step2 In 1 .. Length(subTotal) Loop
+         sumTotal := sumTotal + Substr(subTotal,step2,1);
+      End Loop;    
+   End Loop;  
+RETURN sumTotal Mod 10;
+END;
+/
