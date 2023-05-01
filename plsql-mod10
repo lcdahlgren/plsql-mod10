@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION LUHN_MOD10
 (
-	iNum IN Number Default 1
+   iNum IN Number Default 1
 )
 RETURN int
 AS
